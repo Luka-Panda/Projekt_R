@@ -20,14 +20,25 @@ class Logger:
 
         
         self.session_id = find_the_first_available_session_number()
-        self.path = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"),
-                                f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}.csv')
+
+        self.path = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}.csv')
+        self.path_sysmon = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_sysmon.csv')
+        self.path_track = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track.csv')
+        self.path_resmon = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_resmon.csv')
+        self.path_scheduling = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_scheduling.csv')
+        self.path_performance = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_performance.csv')
+
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.mode = 'w'
 
         self.scenario_time = 0  # Updated by the scheduler class
 
         self.file = None
+        self.file_sysmon = None
+        self.file_track = None
+        self.file_resmon = None
+        self.file_scheduling = None
+        self.file_performance = None
         self.writer = None
         self.queue = list()
 
@@ -101,7 +112,24 @@ class Logger:
     def open(self):
         create_header = False if self.path.exists() and self.mode == 'a' else True
         self.file = open(str(self.path), self.mode, newline = '')
+
+        create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
+        self.file_sysmon = open(str(self.path_sysmon), self.mode, newline = '')
+
+        create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
+        self.file_track = open(str(self.path_track), self.mode, newline = '')
+        
+        create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
+        self.file_resmon = open(str(self.path_resmon), self.mode, newline = '')
+
+        create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
+        self.file_scheduling = open(str(self.path_scheduling), self.mode, newline = '')
+
+        create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
+        self.file_performance = open(str(self.path_performance), self.mode, newline = '')
+
         self.writer = DictWriter(self.file, fieldnames=self.fields_list)
+
         if create_header:
             self.writer.writeheader()
 
@@ -136,7 +164,26 @@ class Logger:
                     if change_dict is not None:
                         for k,v in change_dict.items():
                             row_dict[k] = v
+
+                    if this_row.module == 'sysmon':
+                        self.writer = DictWriter(self.file_sysmon, fieldnames=self.fields_list)
+                        self.writer.writerow(row_dict)
+                    elif this_row.module == 'track':
+                        self.writer = DictWriter(self.file_track, fieldnames=self.fields_list)
+                        self.writer.writerow(row_dict)
+                    elif this_row.module == 'resmon':
+                        self.writer = DictWriter(self.file_resmon, fieldnames=self.fields_list)
+                        self.writer.writerow(row_dict)
+                    elif this_row.module == 'scheduling':
+                        self.writer = DictWriter(self.file_scheduling, fieldnames=self.fields_list)
+                        self.writer.writerow(row_dict)
+                    elif this_row.module == 'performance':
+                        self.writer = DictWriter(self.file_performance, fieldnames=self.fields_list)
+                        self.writer.writerow(row_dict)
+
+                    self.writer = DictWriter(self.file, fieldnames=self.fields_list)
                     self.writer.writerow(row_dict)
+
                     if self.lsl is not None:
                         self.lsl.push(';'.join([str(r) for r in row_dict.values()]))
                 self.empty_queue()
