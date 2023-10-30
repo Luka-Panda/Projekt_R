@@ -21,12 +21,12 @@ class Logger:
         
         self.session_id = find_the_first_available_session_number()
 
-        self.path = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}.csv')
-        self.path_sysmon = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_sysmon.csv')
-        self.path_track = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track.csv')
-        self.path_resmon = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_resmon.csv')
-        self.path_scheduling = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_scheduling.csv')
-        self.path_performance = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_performance.csv')
+        self.path = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}.csv')
+        self.path_sysmon = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_sysmon.csv')
+        self.path_track = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track.csv')
+        self.path_resman = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_resman.csv')
+        self.path_scheduling = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_scheduling.csv')
+        self.path_performance = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_performance.csv')
 
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.mode = 'w'
@@ -36,7 +36,7 @@ class Logger:
         self.file = None
         self.file_sysmon = None
         self.file_track = None
-        self.file_resmon = None
+        self.file_resman = None
         self.file_scheduling = None
         self.file_performance = None
         self.writer = None
@@ -116,16 +116,16 @@ class Logger:
         create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
         self.file_sysmon = open(str(self.path_sysmon), self.mode, newline = '')
 
-        create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
+        create_header = False if self.path_track.exists() and self.mode == 'a' else True
         self.file_track = open(str(self.path_track), self.mode, newline = '')
         
-        create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
-        self.file_resmon = open(str(self.path_resmon), self.mode, newline = '')
+        create_header = False if self.path_resman.exists() and self.mode == 'a' else True
+        self.file_resman = open(str(self.path_resman), self.mode, newline = '')
 
-        create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
+        create_header = False if self.path_scheduling.exists() and self.mode == 'a' else True
         self.file_scheduling = open(str(self.path_scheduling), self.mode, newline = '')
 
-        create_header = False if self.path_sysmon.exists() and self.mode == 'a' else True
+        create_header = False if self.path_performance.exists() and self.mode == 'a' else True
         self.file_performance = open(str(self.path_performance), self.mode, newline = '')
 
         self.writer = DictWriter(self.file, fieldnames=self.fields_list)
@@ -171,8 +171,8 @@ class Logger:
                     elif this_row.module == 'track':
                         self.writer = DictWriter(self.file_track, fieldnames=self.fields_list)
                         self.writer.writerow(row_dict)
-                    elif this_row.module == 'resmon':
-                        self.writer = DictWriter(self.file_resmon, fieldnames=self.fields_list)
+                    elif this_row.module == 'resman':
+                        self.writer = DictWriter(self.file_resman, fieldnames=self.fields_list)
                         self.writer.writerow(row_dict)
                     elif this_row.module == 'scheduling':
                         self.writer = DictWriter(self.file_scheduling, fieldnames=self.fields_list)
