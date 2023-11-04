@@ -33,6 +33,11 @@ class Track(AbstractPlugin):
         self.joystick = None
         self.silent = silent
 
+        self.mouse_mode = False
+        self.mouse_x = 0
+        self.mouse_y = 0
+        self.mouse_sensitivity = 0.25
+
         if not REPLAY_MODE:
             joysticks = get_joysticks()
             if len(joysticks) > 0:
@@ -40,6 +45,7 @@ class Track(AbstractPlugin):
                 self.joystick.open()
             else:
                 self.joystick = None
+                self.mouse_mode = True
                 if self.silent == False:
                     errors.add_error(_('No joystick found'))
 
@@ -48,7 +54,6 @@ class Track(AbstractPlugin):
 
     def get_response_timers(self):
         return [self.response_time]
-
 
     def create_widgets(self):
         super().create_widgets()
@@ -69,6 +74,12 @@ class Track(AbstractPlugin):
         self.ygain = (self.reticle_container.h * self.gain_ratio)/2
         self.cursor_position = next(self.cursor_path_gen)
 
+        # Sketchy but works
+        self.win.mouse_action_lambda = lambda dx, dy : self.on_mouse_moved(dx, dy)
+
+    def on_mouse_moved(self, dx, dy):
+        self.mouse_x += (dx * self.mouse_sensitivity)
+        self.mouse_y += (dy * self.mouse_sensitivity)
 
     def compute_next_plugin_state(self):
         if super().compute_next_plugin_state() == 0:
@@ -134,6 +145,10 @@ class Track(AbstractPlugin):
                     logger.record_input(self.alias, 'joystick_x', compx)
                     logger.record_input(self.alias, 'joystick_y', compy)
 
+                elif self.mouse_mode:
+                    compx = self.mouse_x
+                    compy = self.mouse_y
+
                 compx = compx * self.parameters['joystickforce']
                 compy = compy * self.parameters['joystickforce']
 
@@ -162,3 +177,4 @@ class Track(AbstractPlugin):
                 yield (cursorx, cursory)
             else:
                 yield (0, 0)
+        

@@ -61,6 +61,8 @@ class Window(Window):
         self.modal_dialog = None
         self.slider_visible = False
 
+        self.mouse_action_lambda = lambda dx, dy : None
+
         self.on_key_press_replay = None # used by the replay
 
         # Display the session ID if need be, at window instanciation
@@ -106,6 +108,8 @@ class Window(Window):
                                   0,   b + h*(0.5-container_title_h))),
                   ('c4B/static', C['BLACK'] * 4))
 
+    def on_mouse_motion(self, x, y, dx, dy):
+        self.mouse_action_lambda(dx, dy)
 
     def on_draw(self):
         self.set_mouse_visible(self.is_mouse_necessary())
@@ -115,7 +119,6 @@ class Window(Window):
 
     def is_mouse_necessary(self):
         return self.slider_visible == True or REPLAY_MODE == True
-
 
     # Log any keyboard input, either plugins accept it or not
     def on_key_press(self, symbol, modifiers):

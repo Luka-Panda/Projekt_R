@@ -3,7 +3,7 @@
 # License : CeCILL, version 2.1 (see the LICENSE file)
 
 from pathlib import Path
-from pyglet.window import key as winkey
+from pyglet.window import key as winkey, mouse
 from core.widgets import Simpletext, SimpleHTML, Frame
 from core.constants import *
 from core.container import Container
@@ -263,7 +263,6 @@ class AbstractPlugin:
         
         return
 
-
     def on_key_press(self, symbol, modifiers):
         if self.can_receive_keys == False:
             return
@@ -380,6 +379,7 @@ class AbstractPlugin:
 
     def grouped(self, iterable, n):
         return zip(*[iter(iterable)]*n)
+    
 
 
 class BlockingPlugin(AbstractPlugin):
@@ -476,7 +476,6 @@ class BlockingPlugin(AbstractPlugin):
             response_text = '<center><p>'+self.parameters['response']['text']+'</p></center>'
             self.add_widget(f'press_{key_name}', SimpleHTML, container=self.container,
                             draw_order=self.m_draw+1, text=response_text, wrap_width=0.5, x=0.5, y=0.1)
-
 
     def on_key_press(self, symbol, modifiers):
         if self.parameters['allowkeypress'] == True:

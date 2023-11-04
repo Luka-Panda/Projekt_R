@@ -58,7 +58,9 @@ class Communications(AbstractPlugin):
 
 
     def get_sounds_path(self):
-        return P['SOUNDS'].joinpath(self.parameters['voiceidiom'], self.parameters['voicegender'])
+        #TODO: kristijan - zamijenit ovo s matb-ovim konstantama
+        return Path(Path(__file__).parent.parent, 'includes', 'sounds', 'english', 'male')
+        #return P['SOUNDS'].joinpath(self.parameters['voiceidiom'], self.parameters['voicegender'])
 
 
     def set_sample_sounds(self):
