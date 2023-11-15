@@ -24,8 +24,10 @@ class Logger:
         self.path = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}.csv')
         self.path_sysmon = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_sysmon.csv')
         self.path_track = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track.csv')
-        self.path_track_input = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track_input.csv')
-        self.path_track_state = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track_state.csv')
+        self.path_track_input_x = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track_input_x.csv')
+        self.path_track_input_y = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track_input_y.csv')
+        self.path_track_state_x = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track_state_x.csv')
+        self.path_track_state_y = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_track_state_y.csv')
         self.path_resman = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_resman.csv')
         self.path_scheduling = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_scheduling.csv')
         self.path_performance = PATHS['SESSIONS'].joinpath(self.datetime.strftime("%Y-%m-%d"), f"Session {self.session_id}").joinpath(f'{self.session_id}_{self.datetime.strftime("%y%m%d_%H%M%S")}_performance.csv')
@@ -38,8 +40,10 @@ class Logger:
         self.file = None
         self.file_sysmon = None
         self.file_track = None
-        self.file_track_input = None
-        self.file_track_state = None
+        self.file_track_input_x = None
+        self.file_track_input_y = None
+        self.file_track_state_x = None
+        self.file_track_state_y = None
         self.file_resman = None
         self.file_scheduling = None
         self.file_performance = None
@@ -122,10 +126,16 @@ class Logger:
 
         create_header = False if self.path_track.exists() and self.mode == 'a' else True
         self.file_track = open(str(self.path_track), self.mode, newline = '')
-        create_header = False if self.path_track.exists() and self.mode == 'a' else True
-        self.file_track_input = open(str(self.path_track_input), self.mode, newline = '')
-        create_header = False if self.path_track.exists() and self.mode == 'a' else True
-        self.file_track_state = open(str(self.path_track_state), self.mode, newline = '')
+
+        create_header = False if self.path_track_input_x.exists() and self.mode == 'a' else True
+        self.file_track_input_x = open(str(self.path_track_input_x), self.mode, newline = '')
+        create_header = False if self.path_track_input_y.exists() and self.mode == 'a' else True
+        self.file_track_input_y = open(str(self.path_track_input_y), self.mode, newline = '')
+
+        create_header = False if self.path_track_state_x.exists() and self.mode == 'a' else True
+        self.file_track_state_x = open(str(self.path_track_state_x), self.mode, newline = '')
+        create_header = False if self.path_track_state_y.exists() and self.mode == 'a' else True
+        self.file_track_state_y = open(str(self.path_track_state_y), self.mode, newline = '')
         
         create_header = False if self.path_resman.exists() and self.mode == 'a' else True
         self.file_resman = open(str(self.path_resman), self.mode, newline = '')
@@ -180,11 +190,19 @@ class Logger:
                         self.writer = DictWriter(self.file_track, fieldnames=self.fields_list)
                         self.writer.writerow(row_dict)
                         if this_row.type == 'input':
-                            self.writer = DictWriter(self.file_track_input, fieldnames=self.fields_list)
-                            self.writer.writerow(row_dict)
+                            if this_row.address == 'joystick_x':
+                                self.writer = DictWriter(self.file_track_input_x, fieldnames=self.fields_list)
+                                self.writer.writerow(row_dict)
+                            if this_row.address == 'joystick_y':
+                                self.writer = DictWriter(self.file_track_input_y, fieldnames=self.fields_list)
+                                self.writer.writerow(row_dict)
                         if this_row.type == 'state':
-                            self.writer = DictWriter(self.file_track_state, fieldnames=self.fields_list)
-                            self.writer.writerow(row_dict)
+                            if this_row.address == 'reticle, cursor_proportional_x':
+                                self.writer = DictWriter(self.file_track_state_x, fieldnames=self.fields_list)
+                                self.writer.writerow(row_dict)
+                            if this_row.address == 'reticle, cursor_proportional_y':
+                                self.writer = DictWriter(self.file_track_state_y, fieldnames=self.fields_list)
+                                self.writer.writerow(row_dict)
                     elif this_row.module == 'resman':
                         self.writer = DictWriter(self.file_resman, fieldnames=self.fields_list)
                         self.writer.writerow(row_dict)

@@ -107,8 +107,10 @@ class Reticle(AbstractWidget):
         self.cursor_absolute = self.relative_to_absolute()
         v = self.get_cursor_vertice()
         self.on_batch['cursor'].vertices = v
-        self.logger.record_state(self.name, 'cursor_relative', (x, y))
-        self.logger.record_state(self.name, 'cursor_proportional', self.relative_to_proportional())
+        self.logger.record_state(self.name, 'cursor_relative_x', x)
+        self.logger.record_state(self.name, 'cursor_relative_y', y)
+        self.logger.record_state(self.name, 'cursor_proportional_x', self.relative_to_proportional()[0])
+        self.logger.record_state(self.name, 'cursor_proportional_y', self.relative_to_proportional()[1])
         
     
     def get_cursor_absolute_position(self):
