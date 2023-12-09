@@ -144,10 +144,18 @@ class Track(AbstractPlugin):
                         compx, compy = -self.joystick.x, self.joystick.y
                     logger.record_input(self.alias, 'joystick_x', compx)
                     logger.record_input(self.alias, 'joystick_y', compy)
+                    logger.log_performance(self.alias, 'joystick_x', compx)
+                    logger.log_performance(self.alias, 'joystick_y', compy)
 
                 elif self.mouse_mode:
                     compx = self.mouse_x
                     compy = self.mouse_y
+                    logger.record_input(self.alias, 'joystick_x', compx)
+                    logger.record_input(self.alias, 'joystick_y', compy)
+                    logger.log_performance(self.alias, 'joystick_x', compx)
+                    logger.log_performance(self.alias, 'joystick_y', compy)
+
+                #TODO jel treba loggirat joystick input kao performance?
 
                 compx = compx * self.parameters['joystickforce']
                 compy = compy * self.parameters['joystickforce']
