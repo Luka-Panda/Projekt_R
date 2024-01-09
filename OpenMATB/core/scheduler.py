@@ -3,6 +3,7 @@
 # License : CeCILL, version 2.1 (see the LICENSE file)
 
 import sys
+import pyglet
 from pyglet.app import EventLoop
 from core.scenario import Event
 from core.clock import Clock
@@ -11,6 +12,7 @@ from core.logger import logger
 from core.utils import get_conf_value
 from core.constants import REPLAY_MODE
 from core.error import errors
+import time # dodao ovo
 
 
 
