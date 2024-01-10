@@ -38,10 +38,6 @@
 
 # 3. Set scenario events
 
-# Retrieve participant information :
-
-0:00:00;participantinfo;start
-
 # 3.a. System monitoring events
 
 0:00:10;sysmon;scales-1-failure;down
@@ -52,48 +48,48 @@
 
 # 3.b. Resources management events
 
-0:00:30;resman;pump-3-state;-1
-0:00:40;resman;pump-3-state;0
+0:00:30;resman;pump-3-state;failure
+0:00:40;resman;pump-3-state;off
 
-0:01:00;resman;pump-6-state;-1
-0:01:10;resman;pump-6-state;0
+0:01:00;resman;pump-6-state;failure
+0:01:10;resman;pump-6-state;off
 
-0:01:30;resman;pump-2-state;-1
-0:01:40;resman;pump-2-state;0
+0:01:30;resman;pump-2-state;failure
+0:01:40;resman;pump-2-state;off
 
-0:02:00;resman;pump-4-state;-1
-0:02:10;resman;pump-4-state;0
+0:02:00;resman;pump-4-state;failure
+0:02:10;resman;pump-4-state;off
 
-0:02:50;resman;pump-3-state;-1
-0:03:00;resman;pump-3-state;0
+0:02:50;resman;pump-3-state;failure
+0:03:00;resman;pump-3-state;off
 
-0:03:20;resman;pump-2-state;-1
-0:03:30;resman;pump-2-state;0
+0:03:20;resman;pump-2-state;failure
+0:03:30;resman;pump-2-state;off
 
-0:03:45;resman;pump-6-state;-1
-0:03:55;resman;pump-6-state;0
+0:03:45;resman;pump-6-state;failure
+0:03:55;resman;pump-6-state;off
 
 # 3.c. Tracking events
 
-0:00:00;track automaticsolver;True
+0:00:00;track;automaticsolver;True
 
 0:00:20;track;automaticsolver;False
-0:00:30;track automaticsolver;True
+0:00:30;track;automaticsolver;True
 
 0:01:20;track;automaticsolver;False
-0:01:30;track automaticsolver;True
+0:01:30;track;automaticsolver;True
 
 0:01:40;track;automaticsolver;False
-0:01:50;track automaticsolver;True
+0:01:50;track;automaticsolver;True
 
 0:02:10;track;automaticsolver;False
-0:02:20;track automaticsolver;True
+0:02:20;track;automaticsolver;True
 
 0:02:40;track;automaticsolver;False
-0:02:50;track automaticsolver;True
+0:02:50;track;automaticsolver;True
 
 0:03:40;track;automaticsolver;False
-0:03:50;track automaticsolver;True
+0:03:50;track;automaticsolver;True
 
 # 3.d. Communication events
 
@@ -108,10 +104,7 @@
 # 4. End tasks at 4 minutes
 
 0:04:00;sysmon;stop
-0:04:00;pumpstatus;stop
 0:04:00;resman;stop
 0:04:00;track;stop
 0:04:00;scheduling;stop
 0:04:00;communications;stop
-
-0:04:01;end
