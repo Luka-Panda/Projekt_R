@@ -12,7 +12,8 @@ class Sysmon(AbstractPlugin):
     def __init__(self, taskplacement='topleft', taskupdatetime=200):
         super().__init__(taskplacement, taskupdatetime)
 
-        self.keys = {'F1', 'F2', 'F3', 'F4', 'F5', 'F6'}
+        #self.keys = {'_1', '_2', '_3', '_4', '_5', '_6'}
+        self.keys = {'_1', '_2', '_3', '_4', '_5', '_6'}
         self.moving_seed = 1                # Useful for pseudorandom generation of 
                                             # multiple values at once (arrows move)
 
@@ -22,15 +23,15 @@ class Sysmon(AbstractPlugin):
                        feedbacks=dict(positive=dict(active=True, color=C['GREEN']),
                                       negative=dict(active=True, color=C['RED'])),
 
-                       lights=dict([('1', dict(name='F5', failure=False, default='on',
-                                     oncolor=C['GREEN'], key='F5', on=True)),
-                                    ('2', dict(name='F6', failure=False, default='off',
-                                     oncolor=C['RED'], key='F6', on=False))]),
+                       lights=dict([('1', dict(name='5', failure=False, default='on',
+                                     oncolor=C['GREEN'], key='_5', on=True)),
+                                    ('2', dict(name='6', failure=False, default='off',
+                                     oncolor=C['RED'], key='_6', on=False))]),
 
-                       scales=dict([('1', dict(name='F1', failure=False, side=0, key='F1')),
-                                    ('2', dict(name='F2', failure=False, side=0, key='F2')),
-                                    ('3', dict(name='F3', failure=False, side=0, key='F3')),
-                                    ('4', dict(name='F4', failure=False, side=0, key='F4'))])
+                       scales=dict([('1', dict(name='1', failure=False, side=0, key='_1')),
+                                    ('2', dict(name='2', failure=False, side=0, key='_2')),
+                                    ('3', dict(name='3', failure=False, side=0, key='_3')),
+                                    ('4', dict(name='4', failure=False, side=0, key='_4'))])
                        )
 
         self.parameters.update(new_par)
